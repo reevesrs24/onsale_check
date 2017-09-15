@@ -11,7 +11,7 @@
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
 
         <!-- Styles -->
-       <link href="{{ URL::asset('css/bootstrap.css') }}" rel="stylesheet">
+        <link href="{{ URL::asset('css/bootstrap.css') }}" rel="stylesheet">
 
         <style>
             html, body {
@@ -68,34 +68,24 @@
             .table td {
                 text-align: left;   
             }
+            .table {
+                table-layout:fixed;
+            }
+            .table td {
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
         </style>
     </head>
-    <body style="overflow:auto">
+    <body>
         
     
         <div class="container flex-center position-ref full-height">
-            <div class="content col-lg-6">
+            <div class="content col-lg-12">
                 <div id="vue-div">
                     <template v-if="showOnsaleCheck">
-                        <table class="table table-sm table-hover">
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th>Time</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            @for ($i = 0; $i < sizeof($times); $i++)
-                              <tr scope="row">
-                                <th>{{ $i + 1 }}</th>
-                                <td style="cursor: pointer" id={{ strval($times[$i]->time) }}><a href=/onsale-events/{{strval($times[$i]->time)}}>{{ date('Y-m-d H:i:s', strval($times[$i]->time)) }}</a></td>
-                              </tr>  
-                            @endfor
-                          </tbody>
-                        </table>
-                    </template>
-                    <template v-if="!showOnsaleCheck">
-                        <table class="table table-sm table-hover">
+                        <table class="table table-sm">
                           <thead>
                             <tr>
                               <th>#</th>
@@ -104,25 +94,41 @@
                               <th>Act Name</th>
                               <th>Venue Name</th>
                               <th>Onsale Type</th>
-                              <th>Event ID</th>
+                              <th colspan="2">Event ID</th>
                               <th>Time</th>
                             </tr>
                           </thead>
-                          <tbody v-on:click="toggleTable">
-                            <div style="overflow-y:scroll;">
-                              <tr scope="row" v-for="event in events">
-                                <th></th>
-                                <td style="cursor: pointer">@{{ event.system }}</td>
-                                <td style="cursor: pointer">@{{ event.event_code }}</td>
-                                <td style="cursor: pointer">@{{ event.act_name }}</td>
-                                <td style="cursor: pointer">@{{ event.venue_name }}</td>
-                                <td style="cursor: pointer">@{{ event.onsale_type }}</td>
-                                <td style="cursor: pointer">@{{ event.event_id }}</td>
-                                <td style="cursor: pointer">@{{ event.time }}</td>
+                          <tbody>
+                            <div style="">
+                            @foreach($time as $key => $value)
+                             @if ($value->event_pass == 'fail')
+                              <tr scope="row" style="background-color: #f2dede;">
+                                <th>{{ $value->id }}</th>
+                                <td style="cursor: pointer">{{ $value->system }}</td>
+                                <td style="cursor: pointer">{{ $value->event_code }}</td>
+                                <td style="cursor: pointer">{{ $value->act_name }}</td>
+                                <td style="cursor: pointer">{{ $value->venue_name }}</td>
+                                <td style="cursor: pointer">{{ $value->onsale_type }}</td>
+                                <td style="cursor: pointer" colspan="2">{{ $value->event_id }}</td>
+                                <td style="cursor: pointer">{{ $value->time }}</td>
                               </tr>
+                              @else
+                              <tr scope="row" style="background-color: #dff0d8;">
+                                <th>{{ $value->id }}</th>
+                                <td style="cursor: pointer">{{ $value->system }}</td>
+                                <td style="cursor: pointer">{{ $value->event_code }}</td>
+                                <td style="cursor: pointer">{{ $value->act_name }}</td>
+                                <td style="cursor: pointer">{{ $value->venue_name }}</td>
+                                <td style="cursor: pointer">{{ $value->onsale_type }}</td>
+                                <td style="cursor: pointer" colspan="2">{{ $value->event_id }}</td>
+                                <td style="cursor: pointer">{{ $value->time }}</td>
+                              </tr>
+                              @endif
+                            @endforeach
                             </div>
                           </tbody>
                         </table>
+                        {!! $time->render() !!}
                     </template>
                 </div>
             </div>

@@ -20,4 +20,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('addOnsaleCheck', 'OnsaleController@addOnsaleCheck');
 
-Route::get('getOnsaleCheckData', 'OnsaleController@getOnsaleCheckData');
+Route::get('getOnsaleCheckTimes', 'OnsaleController@getOnsaleCheckTimes');
+
+Route::post('getOnsaleCheckData', 'OnsaleController@getOnsaleCheckData');
+
+Route::put('updateOnsaleData', 'OnsaleController@updateOnsaleData');

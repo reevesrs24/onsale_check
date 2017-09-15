@@ -17,9 +17,11 @@ Route::get('/', function () {
 	$time = DB::table('onsales')->select('time')
                                 ->distinct()
                                 ->orderBy('time', 'desc')
-                                ->take(25)
+                                ->take(5)
                                 ->get();
 
     return view('dashboard', ['times' => $time]);
 });
+
+Route::get('/onsale-events/{id}', 'OnsaleController@getOnsaleEventView');
 

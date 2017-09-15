@@ -27,7 +27,7 @@ class OnsaleController extends Controller
     	return response()->json($result);
     }
 
-    public function getOnsaleCheckData(Request $request) {
+    public function getOnsaleCheckTimes(Request $request) {
         
         $times = DB::table('onsales')->select('time')
                                      ->distinct()
@@ -36,5 +36,40 @@ class OnsaleController extends Controller
 
         return response()->json($times);
     }
+
+    public function getOnsaleCheckData(Request $request) {
+
+        $data = DB::table('onsales')->select('*')
+                                    ->where('time', $request->time)
+                                    ->take(20)
+                                    ->get();
+
+        return response()->json($data);
+    }
+
+    public function getOnsaleEventView($id) {
+
+        $time = DB::table('onsales')->select('*')
+                                    ->where('time', $id)
+                                    ->simplePaginate(10);
+
+
+        return view('onsale-events', compact('time'));
+    }
+
+    public function updateOnsaleData(Request $request) {
+        
+        $result = array(); 
+        //return $request->input('event_pass');
+        DB::table('onsales')->where('event_id', $request->input('event_id'))
+                            ->update(['event_pass' => $request->input('event_pass')]);
+
+
+        $result["sucess"] = true;
+        return response()->json($result);
+    }
+
+
+
 }
     
